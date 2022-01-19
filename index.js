@@ -1,16 +1,16 @@
-const server_url = ""
+let server_url = ""
 
-module.exports = function setFeatureFlaggerUrl(url) {
+exports.setFeatureFlaggerUrl = function(url) {
     server_url = url
 }
 
-module.exports = async function isEnabled(featureName) {
+exports.isEnabled = async function(featureName) {
     const axios = require("axios");
     if (featureName === "") {
         console.warn("Please provide a feature name ")
     } else {
         try {
-            const resp = await axios.get("/api/features/"+featureName)
+            const resp = await axios.get(server_url+"/api/features/"+featureName)
             if (resp.status === 200) {
                 let feature = resp.data
                 return feature.enabled
@@ -18,8 +18,7 @@ module.exports = async function isEnabled(featureName) {
                 console.error(resp.body)
             }
         } catch (error) {
-            console.error(error)
-
+            console.error(error.response.data)
         }
     }
 }
