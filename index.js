@@ -8,6 +8,7 @@ exports.isEnabled = async function(featureName) {
     const axios = require("axios");
     if (featureName === "") {
         console.warn("Please provide a feature name ")
+        return false
     } else {
         try {
             const resp = await axios.get(server_url+"/api/features/"+featureName)
@@ -16,9 +17,11 @@ exports.isEnabled = async function(featureName) {
                 return feature.enabled
             } else {
                 console.error(resp.body)
+                return false
             }
         } catch (error) {
             console.error(error.response.data)
+            return false
         }
     }
 }
